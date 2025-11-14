@@ -1,7 +1,5 @@
 package com.example.demo;
 
-import jakarta.persistence.*;
-
 public class Recipe {
 
     private String name;
@@ -12,7 +10,7 @@ public class Recipe {
 
     public Recipe() {}
 
-    public Recipe(String name, String type, String ingredients, String instructions) {
+    public Recipe(String name, String ingredients, String instructions) {
         this.name = name;
         this.ingredients = ingredients;
         this.instructions = instructions;
