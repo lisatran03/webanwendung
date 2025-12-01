@@ -1,20 +1,31 @@
 package com.example.demo;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.*;
+
+import java.util.List;
+
+@Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Recipe {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
-    private String ingredients;
     private String instructions;
 
+    @ElementCollection
+    private List<String> ingredients;
+
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
     private Category category;
 
     public Recipe() {}
 
-    public Recipe(String name, String ingredients, String instructions) {
-        this.name = name;
-        this.ingredients = ingredients;
-        this.instructions = instructions;
-    }
+    public Long getId() { return id; }
 
     public String getName() {
         return name;
@@ -23,10 +34,10 @@ public class Recipe {
         this.name = name;
     }
 
-    public String getIngredients() {
+    public List<String> getIngredients() {
         return ingredients;
     }
-    public void setIngredients(String ingredients) {
+    public void setIngredients(List<String> ingredients) {
         this.ingredients = ingredients;
     }
 
