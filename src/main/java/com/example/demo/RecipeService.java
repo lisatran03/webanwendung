@@ -80,23 +80,30 @@ public class RecipeService {
 
     // Private Methode zur Kapselung der Category-Logik (ehemals setCategoryIfExists)
     private void setCategory(Recipe r) {
-        if (r.getCategory() == null) return;
-
-        // Versuch, über ID zu finden
-        Long cid = r.getCategory().getId();
-        if (cid != null) {
-            categoryRepo.findById(cid).ifPresent(r::setCategory);
-            return;
+        if (r.getCategory() == null) {
+            // Dies sollte nicht passieren, wenn das Frontend korrekt validiert.
+            throw new IllegalStateException("Kategorie darf nicht null sein.");
         }
 
-        // Versuch, über Namen zu finden oder neu zu erstellen (wenn ID fehlt)
         String name = r.getCategory().getName();
-        if (name != null) {
-            Category cat = categoryRepo.findByName(name);
-            if (cat != null) r.setCategory(cat);
-                // Wenn Kategorie nicht existiert, erstelle und speichere sie
-            else r.setCategory(categoryRepo.save(new Category(name)));
+        if (name == null || name.trim().isEmpty()) {
+            // Kategorie-Name fehlt
+            throw new IllegalStateException("Kategorie-Name fehlt im Request.");
+        }
+
+        // 1. Suche die Kategorie anhand des Namens
+        Category cat = categoryRepo.findByName(name);
+
+        if (cat != null) {
+            // 2. Kategorie gefunden: Setze die gefundene, existierende Entität ins Rezept
+            r.setCategory(cat);
+        } else {
+            // 3. Kategorie NICHT gefunden: Dies ist der Fehlerfall für vorgegebene Listen!
+            // Wir lassen den Speichervorgang fehlschlagen.
+            throw new IllegalStateException("Die Kategorie '" + name +
+                    "' existiert nicht in der Datenbank. Nur vordefinierte Kategorien sind erlaubt.");
         }
     }
 }
+
 
