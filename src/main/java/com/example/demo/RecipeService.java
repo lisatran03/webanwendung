@@ -40,6 +40,8 @@ public class RecipeService {
             existing.setName(updatedRecipe.getName());
             existing.setInstructions(updatedRecipe.getInstructions());
             existing.setIngredients(updatedRecipe.getIngredients());
+            existing.setTime(updatedRecipe.getTime());
+            existing.setDifficulty(updatedRecipe.getDifficulty());
 
             // Update der Kategorie-Beziehung
             if (updatedRecipe.getCategory() != null) {
