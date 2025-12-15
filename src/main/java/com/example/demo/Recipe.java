@@ -17,6 +17,9 @@ public class Recipe {
     private Integer time;
     private String difficulty;
 
+    @Column(columnDefinition = "TEXT")
+    private String imageUrl;
+
     // KORREKTUR: Zutaten als langer String speichern, wie vom Frontend gesendet
     @Column(columnDefinition = "TEXT")
     private String ingredients;
@@ -56,5 +59,9 @@ public class Recipe {
 
     public String getDifficulty() { return difficulty; }
     public void setDifficulty(String difficulty) { this.difficulty = difficulty; }
+
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+
 }
 
