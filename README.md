@@ -10,7 +10,7 @@ Link zum Frontend-Repository: https://github.com/lisatran03/prog3-frontend
 Uses cases:
 - Rezept erstellen ja
 - alle Rezepte anzeigen ja
-- Rezept bearbeiten 
+- Rezept bearbeiten ja
 - Rezept löschen ja
 - Nach Rezeptname suchen ja
 - nach Kategorie filtern ja
