@@ -8,10 +8,10 @@ Wir erstellen eine Anwendung, in der Rezepte gespeichert, verwaltet und gesucht 
 Link zum Frontend-Repository: https://github.com/lisatran03/prog3-frontend
 
 Uses cases:
-- Rezept erstellen
-- alle Rezepte anzeigen
-- Rezept bearbeiten
-- Rezept löschen
-- Nach Rezeptname suchen
-- nach Kategorie filtern
-- zwischen Dark/Light Mode wechseln (Frontend-Use Case)
+- Rezept erstellen ja
+- alle Rezepte anzeigen ja
+- Rezept bearbeiten 
+- Rezept löschen ja
+- Nach Rezeptname suchen ja
+- nach Kategorie filtern ja
+- zwischen Dark/Light Mode wechseln (Frontend-Use Case) ja

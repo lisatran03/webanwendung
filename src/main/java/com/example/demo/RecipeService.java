@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -18,7 +19,6 @@ public class RecipeService {
         this.recipeRepo = recipeRepo;
         this.categoryRepo = categoryRepo;
     }
-
     /**
      * Geschäftslogik: Speichert ein Rezept, kümmert sich um die zugehörige Kategorie.
      * Dies ist die Logik, die aus dem Controller (setCategoryIfExists) verschoben wurde.
@@ -26,7 +26,6 @@ public class RecipeService {
     @Transactional
     public Recipe saveRecipe(Recipe recipe) {
         setCategory(recipe);
-
         return recipeRepo.save(recipe);
     }
 
@@ -44,15 +43,20 @@ public class RecipeService {
             existing.setDifficulty(updatedRecipe.getDifficulty());
             existing.setImageUrl(updatedRecipe.getImageUrl());
 
-
-            // Update der Kategorie-Beziehung
+            // Kategorie-Update
             if (updatedRecipe.getCategory() != null) {
-                setCategory(updatedRecipe); // Logik, um Category zu finden/erstellen
-                existing.setCategory(updatedRecipe.getCategory());
+                try {
+                    setCategory(updatedRecipe);
+                    existing.setCategory(updatedRecipe.getCategory());
+                } catch (IllegalStateException e) {
+                    throw new IllegalStateException("Fehler beim Aktualisieren der Kategorie: " + e.getMessage());
+                }
             }
+
             return recipeRepo.save(existing);
         });
     }
+
 
     /**
      * Geschäftslogik: Zentraler Endpunkt für Suchen, Filtern und alle Rezepte.
@@ -80,29 +84,22 @@ public class RecipeService {
         return true;
     }
 
-    // Private Methode zur Kapselung der Category-Logik (ehemals setCategoryIfExists)
     private void setCategory(Recipe r) {
         if (r.getCategory() == null) {
-            // Dies sollte nicht passieren, wenn das Frontend korrekt validiert.
             throw new IllegalStateException("Kategorie darf nicht null sein.");
         }
 
-        String name = r.getCategory().getName();
-        if (name == null || name.trim().isEmpty()) {
-            // Kategorie-Name fehlt
+        String categoryName = r.getCategory().getName();  // Hier 'r' statt 'recipe'
+
+        if (categoryName == null || categoryName.trim().isEmpty()) {
             throw new IllegalStateException("Kategorie-Name fehlt im Request.");
         }
 
-        // 1. Suche die Kategorie anhand des Namens
-        Category cat = categoryRepo.findByName(name);
-
-        if (cat != null) {
-            // 2. Kategorie gefunden: Setze die gefundene, existierende Entität ins Rezept
-            r.setCategory(cat);
+        Category existingCategory = categoryRepo.findByName(categoryName);
+        if (existingCategory != null) {
+            r.setCategory(existingCategory);  // Hier 'r' statt 'recipe'
         } else {
-            // 3. Kategorie NICHT gefunden: Dies ist der Fehlerfall für vorgegebene Listen!
-            // Wir lassen den Speichervorgang fehlschlagen.
-            throw new IllegalStateException("Die Kategorie '" + name +
+            throw new IllegalStateException("Die Kategorie '" + categoryName +
                     "' existiert nicht in der Datenbank. Nur vordefinierte Kategorien sind erlaubt.");
         }
     }
