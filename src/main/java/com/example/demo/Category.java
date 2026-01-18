@@ -5,18 +5,17 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-@JsonIgnoreProperties({"recipes"}) // Ignoriert die 'recipes' Liste bei der JSON-Serialisierung, um unendliche Rekursion (StackOverflowError) zu vermeiden.
+@JsonIgnoreProperties({"recipes"})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // HINZUGEFÜGT: Stellt sicher, dass keine zwei Kategorien den gleichen Namen haben können.
     @Column(unique = true)
     private String name;
 
     @OneToMany(mappedBy = "category")
-    private List<Recipe> recipes; // Für die Datenbank-Beziehung
+    private List<Recipe> recipes;
 
     // Konstruktoren
     public Category() {}

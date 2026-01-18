@@ -13,7 +13,6 @@ public class RecipeService {
     private final RecipeRepository recipeRepo;
     private final CategoryRepository categoryRepo;
 
-    // Dependency Injection über Konstruktor
     @Autowired
     public RecipeService(RecipeRepository recipeRepo, CategoryRepository categoryRepo) {
         this.recipeRepo = recipeRepo;
@@ -89,7 +88,7 @@ public class RecipeService {
             throw new IllegalStateException("Kategorie darf nicht null sein.");
         }
 
-        String categoryName = r.getCategory().getName();  // Hier 'r' statt 'recipe'
+        String categoryName = r.getCategory().getName();
 
         if (categoryName == null || categoryName.trim().isEmpty()) {
             throw new IllegalStateException("Kategorie-Name fehlt im Request.");
@@ -97,7 +96,7 @@ public class RecipeService {
 
         Category existingCategory = categoryRepo.findByName(categoryName);
         if (existingCategory != null) {
-            r.setCategory(existingCategory);  // Hier 'r' statt 'recipe'
+            r.setCategory(existingCategory);
         } else {
             throw new IllegalStateException("Die Kategorie '" + categoryName +
                     "' existiert nicht in der Datenbank. Nur vordefinierte Kategorien sind erlaubt.");

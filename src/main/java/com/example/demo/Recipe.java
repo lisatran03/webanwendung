@@ -3,9 +3,6 @@ package com.example.demo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-// KEINE List<String> mehr
-// import java.util.List;
-
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Recipe {
@@ -20,32 +17,28 @@ public class Recipe {
     @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
-    // KORREKTUR: Zutaten als langer String speichern, wie vom Frontend gesendet
     @Column(columnDefinition = "TEXT")
     private String ingredients;
 
-    // KORREKTUR: Anweisungen als langer String speichern
     @Column(columnDefinition = "TEXT")
     private String instructions;
 
-    @ManyToOne(fetch = FetchType.EAGER) // Füge FetchType hinzu (empfohlen)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
     public Recipe() {}
 
-    // --- Getter und Setter (aktualisiert auf String) ---
+    // Getter und Setter
 
     public Long getId() { return id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
-    // KORRIGIERT: Zutaten ist jetzt String
     public String getIngredients() { return ingredients; }
     public void setIngredients(String ingredients) { this.ingredients = ingredients; }
 
-    // KORRIGIERT: Anweisungen ist jetzt String
     public String getInstructions() { return instructions; }
     public void setInstructions(String instructions) { this.instructions = instructions; }
 
